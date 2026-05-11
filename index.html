@@ -1,28 +1,371 @@
-<!-- 교사 로그인 박스 (admin/1234! 제거 버전 포함) -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>용유중 진학센터</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Pretendard','맑은 고딕',sans-serif;
+}
+
+body{
+background:#eef4ff;
+max-width:430px;
+margin:auto;
+min-height:100vh;
+color:#222;
+}
+
+header{
+padding:26px 20px 10px;
+font-size:28px;
+font-weight:800;
+color:#1565c0;
+}
+
+.sub{
+padding:0 20px 20px;
+font-size:14px;
+color:#666;
+}
+
+.page{
+display:none;
+padding:0 16px 30px;
+}
+
+.show{
+display:block;
+}
+
+.card{
+background:#fff;
+border-radius:24px;
+padding:20px;
+margin-bottom:16px;
+box-shadow:0 8px 20px rgba(0,0,0,0.06);
+}
+
+h2{
+font-size:22px;
+margin-bottom:16px;
+}
+
+.step{
+font-size:13px;
+font-weight:700;
+color:#1565c0;
+margin-top:18px;
+margin-bottom:8px;
+}
+
+button{
+width:100%;
+border:none;
+border-radius:18px;
+padding:15px;
+font-size:15px;
+font-weight:700;
+cursor:pointer;
+margin-top:12px;
+transition:0.15s;
+}
+
+button:active{
+transform:scale(.98);
+}
+
+.primary{
+background:#1565c0;
+color:#fff;
+}
+
+.gray{
+background:#eef1f5;
+}
+
+.red{
+background:#ef5350;
+color:#fff;
+}
+
+input,select{
+width:100%;
+padding:14px;
+border-radius:16px;
+border:1px solid #dbe3f0;
+font-size:15px;
+margin-top:10px;
+background:#fff;
+}
+
+.typeGrid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.typeBtn{
+padding:16px;
+border-radius:18px;
+background:#f7f9fd;
+border:1px solid #dce5f2;
+text-align:center;
+font-size:14px;
+font-weight:700;
+cursor:pointer;
+transition:0.2s;
+}
+
+.typeBtn.active{
+background:#1565c0;
+color:#fff;
+border-color:#1565c0;
+}
+
+.resultItem{
+padding:16px;
+border-radius:18px;
+background:#f7faff;
+margin-top:10px;
+font-weight:700;
+border:1px solid #dfe8f6;
+cursor:pointer;
+}
+
+.posterBox{
+background:#f8fbff;
+border:2px dashed #d5dfef;
+border-radius:20px;
+padding:16px;
+min-height:320px;
+display:flex;
+justify-content:center;
+align-items:center;
+overflow:hidden;
+}
+
+.posterBox img{
+max-width:100%;
+border-radius:16px;
+}
+
+.empty{
+font-size:15px;
+color:#888;
+text-align:center;
+}
+
+.manageGrid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+
+.manageBtn{
+background:#f7f9fd;
+border:1px solid #dce5f2;
+padding:22px;
+border-radius:20px;
+text-align:center;
+font-weight:700;
+cursor:pointer;
+}
+
+.dropZone{
+border:2px dashed #1565c0;
+background:#f5f9ff;
+padding:28px;
+border-radius:20px;
+text-align:center;
+font-weight:700;
+color:#1565c0;
+margin-top:14px;
+cursor:pointer;
+}
+
+.preview{
+width:100%;
+margin-top:12px;
+border-radius:16px;
+display:none;
+}
+
+.back{
+margin-top:18px;
+background:#eef1f5;
+}
+</style>
+</head>
+
+<body>
+
+<header>🎓 용유중 진학센터</header>
+<div class="sub">
+고등학교 진학 정보를 쉽고 빠르게 확인해보세요.
+</div>
+
+<!-- 로그인 -->
+<div class="page show" id="loginPage">
+
+<div class="card">
+<h2>시작하기</h2>
+
+<button class="gray" onclick="guestLogin()">
+게스트로 이용하기
+</button>
+
+<button class="primary" onclick="openTeacherLogin()">
+교사 전용 로그인
+</button>
+
+</div>
+
 <div class="card" id="teacherLoginBox" style="display:none;">
+
 <h2>교사 로그인</h2>
 
 <input id="adminId" placeholder="아이디">
 <input id="adminPw" type="password" placeholder="비밀번호">
 
-<button class="primary" onclick="teacherLogin()">로그인</button>
-<button class="gray" onclick="closeTeacher()">뒤로가기</button>
+<button class="primary" onclick="teacherLogin()">
+로그인
+</button>
+
+<button class="gray" onclick="closeTeacherLogin()">
+뒤로가기
+</button>
+
 </div>
 
-<!-- 교사 관리 페이지 -->
-<div class="page" id="managePage">
+</div>
+
+<!-- 메인 -->
+<div class="page" id="mainPage">
 
 <div class="card">
-<h2>학교 관리</h2>
 
-<div class="step">STEP 1. 유형 선택</div>
-<select id="manageType"></select>
+<h2>학교 찾기</h2>
+
+<div class="step">STEP 1. 고등학교 유형 선택</div>
+<div class="typeGrid" id="typeGrid"></div>
 
 <div class="step">STEP 2. 지역 선택</div>
-<select id="manageRegion"></select>
+<select id="regionSelect"></select>
 
-<div class="step">STEP 3. 학교 이름 입력</div>
-<input id="manageName" placeholder="학교 이름 입력">
+<div class="step">STEP 3. 학교 선택</div>
+<select id="schoolSelect"></select>
+
+<button class="primary" onclick="searchSchool()">
+조회하기
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>조회 결과</h2>
+
+<div id="resultBox"></div>
+
+</div>
+
+<div class="card" id="teacherCard" style="display:none;">
+
+<h2>교사 관리</h2>
+
+<div class="manageGrid">
+
+<div class="manageBtn" onclick="openAddPage()">
+학교 추가
+</div>
+
+<div class="manageBtn" onclick="openDeletePage()">
+학교 삭제
+</div>
+
+<div class="manageBtn" onclick="openPosterPage()">
+포스터 등록
+</div>
+
+<div class="manageBtn" onclick="openPosterDeletePage()">
+포스터 삭제
+</div>
+
+</div>
+
+<button class="red" onclick="logout()">
+로그아웃
+</button>
+
+</div>
+
+</div>
+
+<!-- 학교 추가 -->
+<div class="page" id="addPage">
+
+<div class="card">
+
+<h2>학교 추가</h2>
+
+<select id="addType"></select>
+<select id="addRegion"></select>
+
+<input id="addName" placeholder="학교 이름 입력">
+
+<button class="primary" onclick="addSchool()">
+학교 추가
+</button>
+
+<button class="back" onclick="goMain()">
+뒤로가기
+</button>
+
+</div>
+
+</div>
+
+<!-- 학교 삭제 -->
+<div class="page" id="deletePage">
+
+<div class="card">
+
+<h2>학교 삭제</h2>
+
+<select id="deleteType"></select>
+<select id="deleteRegion"></select>
+<select id="deleteSchool"></select>
+
+<button class="primary" onclick="showDeleteResult()">
+조회하기
+</button>
+
+<div id="deleteResult"></div>
+
+<button class="back" onclick="goMain()">
+뒤로가기
+</button>
+
+</div>
+
+</div>
+
+<!-- 포스터 등록 -->
+<div class="page" id="posterPage">
+
+<div class="card">
+
+<h2>포스터 등록</h2>
+
+<select id="posterType"></select>
+<select id="posterRegion"></select>
+<select id="posterSchool"></select>
 
 <div class="dropZone" id="dropZone">
 📂 포스터 사진 올리기
@@ -31,15 +374,11 @@
 <input type="file" id="fileInput" accept="image/*" style="display:none;">
 <img id="preview" class="preview">
 
-<button class="primary" onclick="saveSchool()">
-학교 추가 / 포스터 등록
+<button class="primary" onclick="savePoster()">
+포스터 등록
 </button>
 
-<button class="gray" onclick="openDeletePage()">
-학교 삭제 / 포스터 삭제
-</button>
-
-<button class="gray" onclick="backMain()">
+<button class="back" onclick="goMain()">
 뒤로가기
 </button>
 
@@ -47,28 +386,43 @@
 
 </div>
 
-<!-- 삭제 페이지 -->
-<div class="page" id="deletePage">
+<!-- 포스터 삭제 -->
+<div class="page" id="posterDeletePage">
 
 <div class="card">
-<h2>학교 삭제 / 포스터 삭제</h2>
 
-<div class="step">STEP 1. 유형 선택</div>
-<select id="deleteType"></select>
+<h2>포스터 삭제</h2>
 
-<div class="step">STEP 2. 지역 선택</div>
-<select id="deleteRegion"></select>
+<select id="posterDeleteType"></select>
+<select id="posterDeleteRegion"></select>
+<select id="posterDeleteSchool"></select>
 
-<div class="step">STEP 3. 학교 선택</div>
-<select id="deleteSchool"></select>
-
-<button class="primary" onclick="searchDeleteSchool()">
-조회하기
+<button class="primary" onclick="deletePoster()">
+포스터 삭제
 </button>
 
-<div id="deleteResult"></div>
+<button class="back" onclick="goMain()">
+뒤로가기
+</button>
 
-<button class="gray" onclick="openManage()">
+</div>
+
+</div>
+
+<!-- 상세 -->
+<div class="page" id="detailPage">
+
+<div class="card">
+
+<h2 id="detailTitle">학교명</h2>
+
+<div class="posterBox" id="posterBox">
+<div class="empty">
+등록된 포스터가 없습니다.
+</div>
+</div>
+
+<button class="back" onclick="goMain()">
 뒤로가기
 </button>
 
@@ -77,35 +431,242 @@
 </div>
 
 <script>
-/* 삭제 페이지 열기 */
-function openDeletePage(){
+let schools = JSON.parse(localStorage.getItem("schools")) || [];
 
-showPage("deletePage");
+let selectedType = "일반고";
+let selectedImage = "";
 
-let typeHtml="";
+const types = [
+"일반고","특성화고","마이스터고","특목고",
+"국제고&외국어고","자율고","예체고","과학고"
+];
+
+const regions = [
+"서울특별시","인천광역시","경기도","부산광역시",
+"대구광역시","광주광역시","대전광역시",
+"울산광역시","강원특별자치도","충청북도",
+"충청남도","전라북도","전라남도",
+"경상북도","경상남도","제주특별자치도"
+];
+
+if(schools.length===0){
+schools.push({
+type:"일반고",
+region:"인천광역시",
+name:"인천고등학교",
+poster:""
+});
+saveData();
+}
+
+function saveData(){
+localStorage.setItem("schools",JSON.stringify(schools));
+}
+
+function showPage(id){
+document.querySelectorAll(".page").forEach(p=>{
+p.classList.remove("show");
+});
+document.getElementById(id).classList.add("show");
+}
+
+/* 로그인 */
+function guestLogin(){
+showPage("mainPage");
+}
+
+function openTeacherLogin(){
+document.getElementById("teacherLoginBox").style.display="block";
+}
+
+function closeTeacherLogin(){
+document.getElementById("teacherLoginBox").style.display="none";
+}
+
+function teacherLogin(){
+
+let id=document.getElementById("adminId").value;
+let pw=document.getElementById("adminPw").value;
+
+if(id==="admin" && pw==="1234!"){
+document.getElementById("teacherCard").style.display="block";
+showPage("mainPage");
+}else{
+alert("로그인 실패");
+}
+}
+
+function logout(){
+location.reload();
+}
+
+/* 유형 */
+function renderTypes(){
+
+let html="";
+
 types.forEach(t=>{
-typeHtml += `<option>${t}</option>`;
+
+html += `
+<div class="typeBtn ${selectedType===t?'active':''}"
+onclick="selectType('${t}')">
+${t}
+</div>
+`;
+
 });
 
-document.getElementById("deleteType").innerHTML = typeHtml;
+document.getElementById("typeGrid").innerHTML=html;
+}
+
+function selectType(t){
+selectedType=t;
+renderTypes();
+updateSchoolList();
+}
+
+/* select */
+function fillSelects(){
 
 let regionHtml="";
+
 regions.forEach(r=>{
 regionHtml += `<option>${r}</option>`;
 });
 
-document.getElementById("deleteRegion").innerHTML = regionHtml;
+[
+"regionSelect",
+"addRegion",
+"deleteRegion",
+"posterRegion",
+"posterDeleteRegion"
+].forEach(id=>{
+document.getElementById(id).innerHTML=regionHtml;
+});
 
-updateDeleteSchoolList();
+let typeHtml="";
+
+types.forEach(t=>{
+typeHtml += `<option>${t}</option>`;
+});
+
+[
+"addType",
+"deleteType",
+"posterType",
+"posterDeleteType"
+].forEach(id=>{
+document.getElementById(id).innerHTML=typeHtml;
+});
+
+updateSchoolList();
+updateDeleteSchools();
+updatePosterSchools();
+updatePosterDeleteSchools();
 }
 
-/* 삭제용 학교 목록 */
-function updateDeleteSchoolList(){
+function updateSchoolList(){
 
-let type = document.getElementById("deleteType").value;
-let region = document.getElementById("deleteRegion").value;
+let region=document.getElementById("regionSelect").value;
 
-let filtered = schools.filter(s=>
+let filtered=schools.filter(s=>
+s.type===selectedType &&
+s.region===region
+);
+
+let html=`<option value="">학교 선택</option>`;
+
+filtered.forEach(s=>{
+html += `<option>${s.name}</option>`;
+});
+
+document.getElementById("schoolSelect").innerHTML=html;
+}
+
+document.getElementById("regionSelect").onchange=updateSchoolList;
+
+/* 검색 */
+function searchSchool(){
+
+let name=document.getElementById("schoolSelect").value;
+
+if(name===""){
+alert("학교를 선택하세요.");
+return;
+}
+
+let school=schools.find(s=>s.name===name);
+
+document.getElementById("resultBox").innerHTML=
+`
+<div class="resultItem"
+onclick="openDetail('${school.name}')">
+${school.name}
+</div>
+`;
+}
+
+/* 상세 */
+function openDetail(name){
+
+showPage("detailPage");
+
+let school=schools.find(s=>s.name===name);
+
+document.getElementById("detailTitle").innerText=name;
+
+if(school.poster){
+document.getElementById("posterBox").innerHTML=
+`<img src="${school.poster}">`;
+}else{
+document.getElementById("posterBox").innerHTML=
+`<div class="empty">등록된 포스터가 없습니다.</div>`;
+}
+}
+
+/* 메인 복귀 */
+function goMain(){
+showPage("mainPage");
+}
+
+/* 학교 추가 */
+function openAddPage(){
+showPage("addPage");
+}
+
+function addSchool(){
+
+let data={
+type:document.getElementById("addType").value,
+region:document.getElementById("addRegion").value,
+name:document.getElementById("addName").value.trim(),
+poster:""
+};
+
+if(data.name===""){
+alert("학교 이름 입력");
+return;
+}
+
+schools.push(data);
+
+saveData();
+fillSelects();
+
+alert("학교 추가 완료");
+}
+
+/* 학교 삭제 */
+function openDeletePage(){
+showPage("deletePage");
+}
+
+function updateDeleteSchools(){
+
+let type=document.getElementById("deleteType").value;
+let region=document.getElementById("deleteRegion").value;
+
+let filtered=schools.filter(s=>
 s.type===type &&
 s.region===region
 );
@@ -116,76 +677,173 @@ filtered.forEach(s=>{
 html += `<option>${s.name}</option>`;
 });
 
-document.getElementById("deleteSchool").innerHTML = html;
+document.getElementById("deleteSchool").innerHTML=html;
 }
 
-document.addEventListener("change",function(e){
+document.getElementById("deleteType").onchange=updateDeleteSchools;
+document.getElementById("deleteRegion").onchange=updateDeleteSchools;
 
-if(
-e.target.id==="deleteType" ||
-e.target.id==="deleteRegion"
-){
-updateDeleteSchoolList();
-}
-
-});
-
-/* 조회 */
-function searchDeleteSchool(){
+function showDeleteResult(){
 
 let name=document.getElementById("deleteSchool").value;
 
 if(name===""){
-alert("학교를 선택하세요.");
+alert("학교 선택");
+return;
+}
+
+document.getElementById("deleteResult").innerHTML=
+`
+<div class="resultItem">
+${name}
+
+<button class="red"
+onclick="deleteSchoolFinal('${name}')">
+학교 삭제
+</button>
+</div>
+`;
+}
+
+function deleteSchoolFinal(name){
+
+schools=schools.filter(s=>s.name!==name);
+
+saveData();
+fillSelects();
+
+document.getElementById("deleteResult").innerHTML="";
+
+alert("삭제 완료");
+}
+
+/* 포스터 등록 */
+function openPosterPage(){
+showPage("posterPage");
+}
+
+function updatePosterSchools(){
+
+let type=document.getElementById("posterType").value;
+let region=document.getElementById("posterRegion").value;
+
+let filtered=schools.filter(s=>
+s.type===type &&
+s.region===region
+);
+
+let html=`<option value="">학교 선택</option>`;
+
+filtered.forEach(s=>{
+html += `<option>${s.name}</option>`;
+});
+
+document.getElementById("posterSchool").innerHTML=html;
+}
+
+document.getElementById("posterType").onchange=updatePosterSchools;
+document.getElementById("posterRegion").onchange=updatePosterSchools;
+
+function savePoster(){
+
+let name=document.getElementById("posterSchool").value;
+
+if(name===""){
+alert("학교 선택");
 return;
 }
 
 let school=schools.find(s=>s.name===name);
 
-let html=`
-<div class="resultItem">
-${school.name}
+school.poster=selectedImage;
 
-<button class="red"
-onclick="deletePoster('${school.name}')">
-포스터 삭제
-</button>
+saveData();
 
-<button class="red"
-onclick="deleteSchoolFinal('${school.name}')">
-학교 삭제
-</button>
-</div>
-`;
-
-document.getElementById("deleteResult").innerHTML=html;
+alert("포스터 등록 완료");
 }
 
 /* 포스터 삭제 */
-function deletePoster(name){
+function openPosterDeletePage(){
+showPage("posterDeletePage");
+}
+
+function updatePosterDeleteSchools(){
+
+let type=document.getElementById("posterDeleteType").value;
+let region=document.getElementById("posterDeleteRegion").value;
+
+let filtered=schools.filter(s=>
+s.type===type &&
+s.region===region
+);
+
+let html=`<option value="">학교 선택</option>`;
+
+filtered.forEach(s=>{
+html += `<option>${s.name}</option>`;
+});
+
+document.getElementById("posterDeleteSchool").innerHTML=html;
+}
+
+document.getElementById("posterDeleteType").onchange=updatePosterDeleteSchools;
+document.getElementById("posterDeleteRegion").onchange=updatePosterDeleteSchools;
+
+function deletePoster(){
+
+let name=document.getElementById("posterDeleteSchool").value;
+
+if(name===""){
+alert("학교 선택");
+return;
+}
 
 let school=schools.find(s=>s.name===name);
 
-if(school){
 school.poster="";
+
 saveData();
+
 alert("포스터 삭제 완료");
 }
 
+/* 업로드 */
+const drop=document.getElementById("dropZone");
+const file=document.getElementById("fileInput");
+
+drop.onclick=()=>file.click();
+
+file.onchange=function(){
+loadImage(this.files[0]);
 }
 
-/* 학교 삭제 */
-function deleteSchoolFinal(name){
-
-schools = schools.filter(s=>s.name!==name);
-
-saveData();
-
-updateSchoolList();
-updateDeleteSchoolList();
-
-document.getElementById("deleteResult").innerHTML="";
-
-alert("학교 삭제 완료");
+drop.ondragover=function(e){
+e.preventDefault();
 }
+
+drop.ondrop=function(e){
+e.preventDefault();
+loadImage(e.dataTransfer.files[0]);
+}
+
+function loadImage(f){
+
+const reader=new FileReader();
+
+reader.onload=function(e){
+
+selectedImage=e.target.result;
+
+document.getElementById("preview").src=selectedImage;
+document.getElementById("preview").style.display="block";
+}
+
+reader.readAsDataURL(f);
+}
+
+renderTypes();
+fillSelects();
 </script>
+
+</body>
+</html>
