@@ -4,846 +4,684 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>용유중 진학센터</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Pretendard','맑은 고딕',sans-serif;
+:root {
+  --navy:     #0b1d3a;
+  --navy-mid: #163260;
+  --gold:     #c9a84c;
+  --gold-lt:  #e8c97a;
+  --cream:    #f7f3eb;
+  --cream-dk: #ede5d4;
+  --white:    #ffffff;
+  --txt:      #1a1a2e;
+  --muted:    #7a8499;
+  --border:   rgba(201,168,76,0.22);
+  --card-bg:  rgba(255,255,255,0.78);
+  --sh-lg:    0 24px 64px rgba(11,29,58,0.13);
+  --sh-sm:    0 4px 18px rgba(11,29,58,0.08);
+  --r-card:   26px;
+  --r-btn:    15px;
+  --r-input:  13px;
 }
 
-body{
-background:#eef4ff;
-max-width:430px;
-margin:auto;
-min-height:100vh;
-color:#222;
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--cream);
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  color: var(--txt);
+  overflow-x: hidden;
+  position: relative;
 }
 
-header{
-padding:26px 20px 10px;
-font-size:28px;
-font-weight:800;
-color:#1565c0;
+/* ── 배경 광원 ── */
+.bg-glow {
+  position: fixed; pointer-events: none; z-index: 0;
+}
+.bg-glow-1 {
+  top: -160px; right: -100px;
+  width: 420px; height: 420px;
+  background: radial-gradient(circle, rgba(201,168,76,.16) 0%, transparent 68%);
+}
+.bg-glow-2 {
+  bottom: -120px; left: -80px;
+  width: 340px; height: 340px;
+  background: radial-gradient(circle, rgba(22,50,96,.14) 0%, transparent 68%);
 }
 
-.sub{
-padding:0 20px 20px;
-font-size:14px;
-color:#666;
+/* ── 헤더 ── */
+.site-header {
+  position: relative; z-index: 10;
+  padding: 34px 22px 6px;
+}
+.site-header .badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--navy);
+  color: var(--gold);
+  font-size: 9.5px; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase;
+  padding: 5px 11px; border-radius: 20px;
+  margin-bottom: 11px;
+}
+.site-header .title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 29px; font-weight: 700;
+  color: var(--navy); line-height: 1.2;
+  letter-spacing: -.025em;
+}
+.site-header .title em { color: var(--gold); font-style: normal; }
+.site-header .subtitle {
+  margin-top: 7px; padding-bottom: 24px;
+  font-size: 12.5px; color: var(--muted); font-weight: 300;
 }
 
-.page{
-display:none;
-padding:0 16px 30px;
+/* ── 페이지 ── */
+.page { display: none; padding: 0 14px 44px; position: relative; z-index: 1; }
+.page.show { display: block; }
+
+/* ── 카드 ── */
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(14px);
+  border-radius: var(--r-card);
+  padding: 22px 20px;
+  margin-bottom: 14px;
+  box-shadow: var(--sh-lg);
+  border: 1px solid rgba(255,255,255,.92);
+  animation: rise .42s cubic-bezier(.22,1,.36,1) both;
+}
+.card:nth-child(2){ animation-delay:.07s }
+.card:nth-child(3){ animation-delay:.13s }
+@keyframes rise {
+  from { opacity:0; transform:translateY(20px) }
+  to   { opacity:1; transform:translateY(0) }
 }
 
-.show{
-display:block;
+/* ── 카드 제목 ── */
+.card-hd {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 19px; font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 18px;
+  display: flex; align-items: center; gap: 9px;
+}
+.card-hd::before {
+  content: '';
+  width: 3.5px; height: 19px; flex-shrink: 0;
+  background: linear-gradient(180deg, var(--gold), var(--gold-lt));
+  border-radius: 2px;
 }
 
-.card{
-background:#fff;
-border-radius:24px;
-padding:20px;
-margin-bottom:16px;
-box-shadow:0 8px 20px rgba(0,0,0,0.06);
+/* ── STEP 라벨 ── */
+.step-lbl {
+  font-size: 10.5px; font-weight: 700;
+  color: var(--gold); letter-spacing: .11em; text-transform: uppercase;
+  margin: 20px 0 9px;
+  display: flex; align-items: center; gap: 7px;
+}
+.step-lbl::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, var(--border), transparent);
 }
 
-h2{
-font-size:22px;
-margin-bottom:16px;
+/* ── 버튼 ── */
+button {
+  width: 100%; border: none;
+  border-radius: var(--r-btn);
+  padding: 15px;
+  font-size: 13.5px; font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  letter-spacing: .04em;
+  cursor: pointer; margin-top: 11px;
+  transition: all .2s cubic-bezier(.22,1,.36,1);
+  position: relative; overflow: hidden;
+}
+button:active { transform: scale(.97); }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+  color: var(--white);
+  box-shadow: 0 8px 22px rgba(11,29,58,.3);
+}
+.btn-primary:hover {
+  box-shadow: 0 12px 30px rgba(11,29,58,.38);
+  transform: translateY(-1px);
 }
 
-.step{
-font-size:13px;
-font-weight:700;
-color:#1565c0;
-margin-top:18px;
-margin-bottom:8px;
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold), var(--gold-lt));
+  color: var(--navy);
+  font-weight: 800;
+  box-shadow: 0 8px 22px rgba(201,168,76,.38);
+}
+.btn-gold:hover {
+  box-shadow: 0 12px 30px rgba(201,168,76,.48);
+  transform: translateY(-1px);
 }
 
-button{
-width:100%;
-border:none;
-border-radius:18px;
-padding:15px;
-font-size:15px;
-font-weight:700;
-cursor:pointer;
-margin-top:12px;
-transition:0.15s;
+.btn-ghost {
+  background: transparent;
+  color: rgba(255,255,255,.88);
+  border: 1.5px solid rgba(255,255,255,.22);
+}
+.btn-ghost:hover { background: rgba(255,255,255,.08); }
+
+.btn-danger {
+  background: linear-gradient(135deg, #7f1d1d, #b91c1c);
+  color: var(--white);
+  box-shadow: 0 6px 18px rgba(185,28,28,.28);
+}
+.btn-danger:hover { box-shadow: 0 10px 26px rgba(185,28,28,.38); transform:translateY(-1px); }
+
+.btn-soft { background: rgba(11,29,58,.07); color: var(--muted); margin-top:18px; }
+.btn-soft:hover { background: rgba(11,29,58,.12); color: var(--navy); }
+
+/* ── 입력 ── */
+input, select {
+  width: 100%; padding: 13px 15px;
+  border-radius: var(--r-input);
+  border: 1.5px solid rgba(201,168,76,.22);
+  font-size: 13.5px;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-top: 9px;
+  background: rgba(255,255,255,.82);
+  color: var(--navy); outline: none;
+  transition: all .18s;
+  appearance: none; -webkit-appearance: none;
+}
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%23c9a84c' stroke-width='1.7' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 38px;
+}
+input:focus, select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201,168,76,.13);
+  background: var(--white);
+}
+input::placeholder { color: #bac0cc; }
+
+/* ── 유형 그리드 ── */
+.type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.type-btn {
+  padding: 13px 8px;
+  border-radius: 13px;
+  background: rgba(255,255,255,.65);
+  border: 1.5px solid rgba(201,168,76,.18);
+  text-align: center;
+  font-size: 12.5px; font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--navy); cursor: pointer;
+  transition: all .18s cubic-bezier(.22,1,.36,1);
+}
+.type-btn:hover {
+  border-color: var(--gold);
+  background: rgba(201,168,76,.07);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(201,168,76,.18);
+}
+.type-btn.active {
+  background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+  color: var(--gold-lt); border-color: transparent;
+  box-shadow: 0 6px 18px rgba(11,29,58,.28);
+  transform: translateY(-2px);
 }
 
-button:active{
-transform:scale(.98);
+/* ── 결과 아이템 ── */
+.result-item {
+  padding: 15px 18px;
+  border-radius: 14px;
+  background: linear-gradient(135deg,rgba(255,255,255,.9),rgba(247,243,235,.8));
+  margin-top: 9px; font-weight: 600; font-size: 14px;
+  color: var(--navy); border: 1px solid var(--border);
+  cursor: pointer; transition: all .18s;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.result-item::after { content: '›'; color: var(--gold); font-size: 20px; line-height: 1; }
+.result-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(11,29,58,.11);
+  border-color: var(--gold);
+}
+.result-empty {
+  font-size: 13px; color: #b5bdc8; text-align: center; padding: 14px 0;
 }
 
-.primary{
-background:#1565c0;
-color:#fff;
+/* ── 포스터 박스 ── */
+.poster-box {
+  background: linear-gradient(135deg,rgba(247,243,235,.9),rgba(237,229,212,.6));
+  border: 2px dashed rgba(201,168,76,.35);
+  border-radius: 18px; padding: 14px;
+  min-height: 290px;
+  display: flex; justify-content: center; align-items: center;
+  overflow: hidden; margin-top: 14px;
+}
+.poster-box img { max-width: 100%; border-radius: 13px; box-shadow: var(--sh-sm); }
+.poster-empty {
+  text-align: center; color: #b5bdc8; font-size: 13px; line-height: 1.7;
+}
+.poster-empty::before { content:'🗂'; display:block; font-size:30px; margin-bottom:9px; }
+
+/* ── 관리 그리드 ── */
+.manage-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.manage-btn {
+  background: linear-gradient(135deg,rgba(255,255,255,.9),rgba(247,243,235,.8));
+  border: 1px solid var(--border);
+  padding: 18px 12px; border-radius: 17px;
+  text-align: center; font-weight: 700; font-size: 12.5px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--navy); cursor: pointer;
+  transition: all .2s cubic-bezier(.22,1,.36,1); line-height: 1.4;
+}
+.manage-btn .ic { font-size: 21px; display: block; margin-bottom: 5px; }
+.manage-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 26px rgba(11,29,58,.13);
+  border-color: var(--gold);
 }
 
-.gray{
-background:#eef1f5;
+/* ── 드롭존 ── */
+.drop-zone {
+  border: 2px dashed rgba(201,168,76,.45);
+  background: linear-gradient(135deg,rgba(247,243,235,.65),rgba(237,229,212,.45));
+  padding: 28px; border-radius: 16px;
+  text-align: center; font-weight: 600; font-size: 13.5px;
+  color: var(--gold); margin-top: 14px; cursor: pointer;
+  transition: all .18s;
 }
+.drop-zone:hover { background: rgba(201,168,76,.09); border-color: var(--gold); transform:translateY(-2px); }
+.drop-zone .dz-ic { font-size: 28px; display: block; margin-bottom: 7px; }
+.drop-zone .dz-sub { font-size: 10.5px; color: var(--muted); margin-top: 3px; font-weight: 400; }
+.drop-preview { width:100%; margin-top:12px; border-radius:14px; display:none; box-shadow:var(--sh-sm); }
 
-.red{
-background:#ef5350;
-color:#fff;
-}
+/* ── 구분선 ── */
+.divider { height:1px; background:linear-gradient(90deg,transparent,var(--border),transparent); margin:14px 0; }
 
-input,select{
-width:100%;
-padding:14px;
-border-radius:16px;
-border:1px solid #dbe3f0;
-font-size:15px;
-margin-top:10px;
-background:#fff;
+/* ── 로그인 히어로 ── */
+.login-hero {
+  background: linear-gradient(145deg, var(--navy) 0%, var(--navy-mid) 100%);
+  border-radius: var(--r-card);
+  padding: 36px 22px 28px;
+  margin-bottom: 14px;
+  text-align: center;
+  box-shadow: 0 22px 56px rgba(11,29,58,.32);
+  position: relative; overflow: hidden;
 }
+.login-hero::before {
+  content:''; position:absolute; top:-50px; right:-50px;
+  width:210px; height:210px;
+  background: radial-gradient(circle, rgba(201,168,76,.22), transparent 68%);
+}
+.login-hero::after {
+  content:''; position:absolute; bottom:-40px; left:-40px;
+  width:160px; height:160px;
+  background: radial-gradient(circle, rgba(255,255,255,.06), transparent 68%);
+}
+.hero-emblem { font-size:48px; display:block; margin-bottom:14px; position:relative; z-index:1; }
+.hero-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 21px; font-weight: 700;
+  color: var(--white); margin-bottom: 5px;
+  position: relative; z-index: 1;
+}
+.hero-sub {
+  font-size: 10.5px; color: rgba(201,168,76,.8);
+  letter-spacing: .09em; position: relative; z-index: 1;
+}
+.login-hero .btn-gold,
+.login-hero .btn-ghost { position:relative; z-index:1; }
 
-.typeGrid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-}
-
-.typeBtn{
-padding:16px;
-border-radius:18px;
-background:#f7f9fd;
-border:1px solid #dce5f2;
-text-align:center;
-font-size:14px;
-font-weight:700;
-cursor:pointer;
-transition:0.2s;
-}
-
-.typeBtn.active{
-background:#1565c0;
-color:#fff;
-border-color:#1565c0;
-}
-
-.resultItem{
-padding:16px;
-border-radius:18px;
-background:#f7faff;
-margin-top:10px;
-font-weight:700;
-border:1px solid #dfe8f6;
-cursor:pointer;
-}
-
-.posterBox{
-background:#f8fbff;
-border:2px dashed #d5dfef;
-border-radius:20px;
-padding:16px;
-min-height:320px;
-display:flex;
-justify-content:center;
-align-items:center;
-overflow:hidden;
-}
-
-.posterBox img{
-max-width:100%;
-border-radius:16px;
-}
-
-.empty{
-font-size:15px;
-color:#888;
-text-align:center;
-}
-
-.manageGrid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-}
-
-.manageBtn{
-background:#f7f9fd;
-border:1px solid #dce5f2;
-padding:22px;
-border-radius:20px;
-text-align:center;
-font-weight:700;
-cursor:pointer;
-}
-
-.dropZone{
-border:2px dashed #1565c0;
-background:#f5f9ff;
-padding:28px;
-border-radius:20px;
-text-align:center;
-font-weight:700;
-color:#1565c0;
-margin-top:14px;
-cursor:pointer;
-}
-
-.preview{
-width:100%;
-margin-top:12px;
-border-radius:16px;
-display:none;
-}
-
-.back{
-margin-top:18px;
-background:#eef1f5;
-}
+/* ── 삭제결과 행 ── */
+.del-row { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.del-row button { width:auto; padding:9px 18px; margin-top:0; font-size:12.5px; border-radius:11px; }
 </style>
 </head>
-
 <body>
 
-<header>🎓 용유중 진학센터</header>
-<div class="sub">
-고등학교 진학 정보를 쉽고 빠르게 확인해보세요.
-</div>
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<header class="site-header">
+  <div class="badge">🎓 Yongyou Middle School</div>
+  <div class="title">진학<em>센터</em></div>
+  <div class="subtitle">고등학교 진학 정보를 쉽고 빠르게 확인해보세요.</div>
+</header>
 
 <!-- 로그인 -->
 <div class="page show" id="loginPage">
+  <div class="login-hero">
+    <span class="hero-emblem">🎓</span>
 
-<div class="card">
-<h2>시작하기</h2>
+    <button class="btn-gold" onclick="guestLogin()">학생 · 학부모 입장</button>
+    <button class="btn-ghost" onclick="openTeacherLogin()">교사 전용 로그인</button>
+  </div>
 
-<button class="gray" onclick="guestLogin()">
-게스트로 이용하기
-</button>
-
-<button class="primary" onclick="openTeacherLogin()">
-교사 전용 로그인
-</button>
-
-</div>
-
-<div class="card" id="teacherLoginBox" style="display:none;">
-
-<h2>교사 로그인</h2>
-
-<input id="adminId" placeholder="아이디">
-<input id="adminPw" type="password" placeholder="비밀번호">
-
-<button class="primary" onclick="teacherLogin()">
-로그인
-</button>
-
-<button class="gray" onclick="closeTeacherLogin()">
-뒤로가기
-</button>
-
-</div>
-
+  <div class="card" id="teacherLoginBox" style="display:none;">
+    <div class="card-hd">교사 로그인</div>
+    <input id="adminId" placeholder="아이디">
+    <input id="adminPw" type="password" placeholder="비밀번호">
+    <button class="btn-primary" onclick="teacherLogin()">로그인</button>
+    <button class="btn-soft" onclick="closeTeacherLogin()">뒤로가기</button>
+  </div>
 </div>
 
 <!-- 메인 -->
 <div class="page" id="mainPage">
+  <div class="card">
+    <div class="card-hd">학교 찾기</div>
+    <div class="step-lbl">Step 01 · 고등학교 유형</div>
+    <div class="type-grid" id="typeGrid"></div>
+    <div class="step-lbl">Step 02 · 지역 선택</div>
+    <select id="regionSelect"></select>
+    <div class="step-lbl">Step 03 · 학교 선택</div>
+    <select id="schoolSelect"></select>
+    <button class="btn-primary" onclick="searchSchool()" style="margin-top:18px;">조회하기</button>
+  </div>
 
-<div class="card">
+  <div class="card">
+    <div class="card-hd">조회 결과</div>
+    <div id="resultBox"><div class="result-empty">검색 결과가 여기에 표시됩니다.</div></div>
+  </div>
 
-<h2>학교 찾기</h2>
-
-<div class="step">STEP 1. 고등학교 유형 선택</div>
-<div class="typeGrid" id="typeGrid"></div>
-
-<div class="step">STEP 2. 지역 선택</div>
-<select id="regionSelect"></select>
-
-<div class="step">STEP 3. 학교 선택</div>
-<select id="schoolSelect"></select>
-
-<button class="primary" onclick="searchSchool()">
-조회하기
-</button>
-
-</div>
-
-<div class="card">
-
-<h2>조회 결과</h2>
-
-<div id="resultBox"></div>
-
-</div>
-
-<div class="card" id="teacherCard" style="display:none;">
-
-<h2>교사 관리</h2>
-
-<div class="manageGrid">
-
-<div class="manageBtn" onclick="openAddPage()">
-학교 추가
-</div>
-
-<div class="manageBtn" onclick="openDeletePage()">
-학교 삭제
-</div>
-
-<div class="manageBtn" onclick="openPosterPage()">
-포스터 등록
-</div>
-
-<div class="manageBtn" onclick="openPosterDeletePage()">
-포스터 삭제
-</div>
-
-</div>
-
-<button class="red" onclick="logout()">
-로그아웃
-</button>
-
-</div>
-
+  <div class="card" id="teacherCard" style="display:none;">
+    <div class="card-hd">교사 관리</div>
+    <div class="manage-grid">
+      <div class="manage-btn" onclick="openAddPage()"><span class="ic">🏫</span>학교 추가</div>
+      <div class="manage-btn" onclick="openDeletePage()"><span class="ic">🗑</span>학교 삭제</div>
+      <div class="manage-btn" onclick="openPosterPage()"><span class="ic">🖼</span>포스터 등록</div>
+      <div class="manage-btn" onclick="openPosterDeletePage()"><span class="ic">✂️</span>포스터 삭제</div>
+    </div>
+    <div class="divider"></div>
+    <button class="btn-danger" onclick="logout()">로그아웃</button>
+  </div>
 </div>
 
 <!-- 학교 추가 -->
 <div class="page" id="addPage">
-
-<div class="card">
-
-<h2>학교 추가</h2>
-
-<select id="addType"></select>
-<select id="addRegion"></select>
-
-<input id="addName" placeholder="학교 이름 입력">
-
-<button class="primary" onclick="addSchool()">
-학교 추가
-</button>
-
-<button class="back" onclick="goMain()">
-뒤로가기
-</button>
-
-</div>
-
+  <div class="card">
+    <div class="card-hd">학교 추가</div>
+    <select id="addType"></select>
+    <select id="addRegion"></select>
+    <input id="addName" placeholder="학교 이름 입력">
+    <button class="btn-primary" onclick="addSchool()">학교 추가</button>
+    <button class="btn-soft" onclick="goMain()">뒤로가기</button>
+  </div>
 </div>
 
 <!-- 학교 삭제 -->
 <div class="page" id="deletePage">
-
-<div class="card">
-
-<h2>학교 삭제</h2>
-
-<select id="deleteType"></select>
-<select id="deleteRegion"></select>
-<select id="deleteSchool"></select>
-
-<button class="primary" onclick="showDeleteResult()">
-조회하기
-</button>
-
-<div id="deleteResult"></div>
-
-<button class="back" onclick="goMain()">
-뒤로가기
-</button>
-
-</div>
-
+  <div class="card">
+    <div class="card-hd">학교 삭제</div>
+    <select id="deleteType"></select>
+    <select id="deleteRegion"></select>
+    <select id="deleteSchool"></select>
+    <button class="btn-primary" onclick="showDeleteResult()">조회하기</button>
+    <div id="deleteResult"></div>
+    <button class="btn-soft" onclick="goMain()">뒤로가기</button>
+  </div>
 </div>
 
 <!-- 포스터 등록 -->
 <div class="page" id="posterPage">
-
-<div class="card">
-
-<h2>포스터 등록</h2>
-
-<select id="posterType"></select>
-<select id="posterRegion"></select>
-<select id="posterSchool"></select>
-
-<div class="dropZone" id="dropZone">
-📂 포스터 사진 올리기
-</div>
-
-<input type="file" id="fileInput" accept="image/*" style="display:none;">
-<img id="preview" class="preview">
-
-<button class="primary" onclick="savePoster()">
-포스터 등록
-</button>
-
-<button class="back" onclick="goMain()">
-뒤로가기
-</button>
-
-</div>
-
+  <div class="card">
+    <div class="card-hd">포스터 등록</div>
+    <select id="posterType"></select>
+    <select id="posterRegion"></select>
+    <select id="posterSchool"></select>
+    <div class="drop-zone" id="dropZone">
+      <span class="dz-ic">📂</span>
+      포스터 사진 올리기
+      <div class="dz-sub">클릭하거나 파일을 드래그하세요</div>
+    </div>
+    <input type="file" id="fileInput" accept="image/*" style="display:none;">
+    <img id="preview" class="drop-preview">
+    <button class="btn-primary" onclick="savePoster()">포스터 등록</button>
+    <button class="btn-soft" onclick="goMain()">뒤로가기</button>
+  </div>
 </div>
 
 <!-- 포스터 삭제 -->
 <div class="page" id="posterDeletePage">
-
-<div class="card">
-
-<h2>포스터 삭제</h2>
-
-<select id="posterDeleteType"></select>
-<select id="posterDeleteRegion"></select>
-<select id="posterDeleteSchool"></select>
-
-<button class="primary" onclick="deletePoster()">
-포스터 삭제
-</button>
-
-<button class="back" onclick="goMain()">
-뒤로가기
-</button>
-
-</div>
-
+  <div class="card">
+    <div class="card-hd">포스터 삭제</div>
+    <select id="posterDeleteType"></select>
+    <select id="posterDeleteRegion"></select>
+    <select id="posterDeleteSchool"></select>
+    <div class="poster-box" id="posterPreviewBox">
+      <div class="poster-empty">등록된 포스터가 없습니다.</div>
+    </div>
+    <button class="btn-danger" onclick="deletePoster()" style="margin-top:14px;">포스터 삭제</button>
+    <button class="btn-soft" onclick="goMain()">뒤로가기</button>
+  </div>
 </div>
 
 <!-- 상세 -->
 <div class="page" id="detailPage">
-
-<div class="card">
-
-<h2 id="detailTitle">학교명</h2>
-
-<div class="posterBox" id="posterBox">
-<div class="empty">
-등록된 포스터가 없습니다.
-</div>
-</div>
-
-<button class="back" onclick="goMain()">
-뒤로가기
-</button>
-
-</div>
-
+  <div class="card">
+    <div class="card-hd"><span id="detailTitle">학교명</span></div>
+    <div class="poster-box" id="posterBox">
+      <div class="poster-empty">등록된 포스터가 없습니다.</div>
+    </div>
+    <button class="btn-soft" onclick="goMain()" style="margin-top:14px;">← 목록으로</button>
+  </div>
 </div>
 
 <script>
-let schools = JSON.parse(localStorage.getItem("schools")) || [];
+// ── 데이터 ──────────────────────────────────────────
+let schools = JSON.parse(localStorage.getItem('schools')) || [];
+let selectedType  = '일반고';
+let selectedImage = '';
 
-let selectedType = "일반고";
-let selectedImage = "";
+const types = ['일반고','특성화고','마이스터고','특목고','국제고&외국어고','자율고','예체고','과학고'];
+const regions = ['서울특별시','인천광역시','경기도','부산광역시','대구광역시','광주광역시','대전광역시','울산광역시','강원특별자치도','충청북도','충청남도','전라북도','전라남도','경상북도','경상남도','제주특별자치도'];
 
-const types = [
-"일반고","특성화고","마이스터고","특목고",
-"국제고&외국어고","자율고","예체고","과학고"
-];
-
-const regions = [
-"서울특별시","인천광역시","경기도","부산광역시",
-"대구광역시","광주광역시","대전광역시",
-"울산광역시","강원특별자치도","충청북도",
-"충청남도","전라북도","전라남도",
-"경상북도","경상남도","제주특별자치도"
-];
-
-if(schools.length===0){
-schools.push({
-type:"일반고",
-region:"인천광역시",
-name:"인천고등학교",
-poster:""
-});
-saveData();
+if (schools.length === 0) {
+  schools.push({ type:'일반고', region:'인천광역시', name:'인천고등학교', poster:'' });
+  save();
 }
 
-function saveData(){
-localStorage.setItem("schools",JSON.stringify(schools));
+function save() { localStorage.setItem('schools', JSON.stringify(schools)); }
+
+// ── 페이지 전환 ──────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('show'));
+  const el = document.getElementById(id);
+  el.classList.add('show');
+  el.querySelectorAll('.card').forEach((c, i) => {
+    c.style.animation = 'none';
+    c.offsetHeight;
+    c.style.animation = `rise .42s cubic-bezier(.22,1,.36,1) ${i * .07}s both`;
+  });
 }
 
-function showPage(id){
-document.querySelectorAll(".page").forEach(p=>{
-p.classList.remove("show");
-});
-document.getElementById(id).classList.add("show");
+function guestLogin()       { showPage('mainPage'); }
+function openTeacherLogin() { document.getElementById('teacherLoginBox').style.display = 'block'; }
+function closeTeacherLogin(){ document.getElementById('teacherLoginBox').style.display = 'none'; }
+function goMain()           { showPage('mainPage'); }
+function logout()           { location.reload(); }
+
+function teacherLogin() {
+  const id = document.getElementById('adminId').value;
+  const pw = document.getElementById('adminPw').value;
+  if (id === 'admin' && pw === '1234!') {
+    document.getElementById('teacherCard').style.display = 'block';
+    showPage('mainPage');
+  } else {
+    alert('로그인 실패');
+  }
 }
 
-/* 로그인 */
-function guestLogin(){
-showPage("mainPage");
+// ── 유형 버튼 ────────────────────────────────────────
+function renderTypes() {
+  document.getElementById('typeGrid').innerHTML = types.map(t =>
+    `<div class="type-btn ${selectedType === t ? 'active' : ''}" onclick="selectType('${t}')">${t}</div>`
+  ).join('');
+}
+function selectType(t) { selectedType = t; renderTypes(); updateSchoolList(); }
+
+// ── select 채우기 ────────────────────────────────────
+function fillSelects() {
+  const rH = regions.map(r => `<option>${r}</option>`).join('');
+  ['regionSelect','addRegion','deleteRegion','posterRegion','posterDeleteRegion']
+    .forEach(id => { document.getElementById(id).innerHTML = rH; });
+
+  const tH = types.map(t => `<option>${t}</option>`).join('');
+  ['addType','deleteType','posterType','posterDeleteType']
+    .forEach(id => { document.getElementById(id).innerHTML = tH; });
+
+  updateSchoolList(); updateDeleteSchools(); updatePosterSchools(); updatePosterDeleteSchools();
 }
 
-function openTeacherLogin(){
-document.getElementById("teacherLoginBox").style.display="block";
+function updateSchoolList() {
+  const region = document.getElementById('regionSelect').value;
+  const f = schools.filter(s => s.type === selectedType && s.region === region);
+  document.getElementById('schoolSelect').innerHTML =
+    `<option value="">학교 선택</option>` + f.map(s => `<option>${s.name}</option>`).join('');
+}
+document.getElementById('regionSelect').onchange = updateSchoolList;
+
+// ── 학교 검색 ────────────────────────────────────────
+function searchSchool() {
+  const name = document.getElementById('schoolSelect').value;
+  if (!name) { alert('학교를 선택하세요.'); return; }
+  document.getElementById('resultBox').innerHTML =
+    `<div class="result-item" onclick="openDetail('${name}')">${name}</div>`;
 }
 
-function closeTeacherLogin(){
-document.getElementById("teacherLoginBox").style.display="none";
+function openDetail(name) {
+  showPage('detailPage');
+  const s = schools.find(s => s.name === name);
+  document.getElementById('detailTitle').innerText = name;
+  document.getElementById('posterBox').innerHTML = s?.poster
+    ? `<img src="${s.poster}">`
+    : `<div class="poster-empty">등록된 포스터가 없습니다.</div>`;
 }
 
-function teacherLogin(){
-
-let id=document.getElementById("adminId").value;
-let pw=document.getElementById("adminPw").value;
-
-if(id==="admin" && pw==="1234!"){
-document.getElementById("teacherCard").style.display="block";
-showPage("mainPage");
-}else{
-alert("로그인 실패");
-}
-}
-
-function logout(){
-location.reload();
-}
-
-/* 유형 */
-function renderTypes(){
-
-let html="";
-
-types.forEach(t=>{
-
-html += `
-<div class="typeBtn ${selectedType===t?'active':''}"
-onclick="selectType('${t}')">
-${t}
-</div>
-`;
-
-});
-
-document.getElementById("typeGrid").innerHTML=html;
+// ── 학교 추가 ────────────────────────────────────────
+function openAddPage() { showPage('addPage'); }
+function addSchool() {
+  const data = {
+    type:   document.getElementById('addType').value,
+    region: document.getElementById('addRegion').value,
+    name:   document.getElementById('addName').value.trim(),
+    poster: ''
+  };
+  if (!data.name) { alert('학교 이름을 입력하세요.'); return; }
+  if (schools.find(s => s.name === data.name && s.type === data.type && s.region === data.region)) {
+    alert('이미 등록된 학교입니다.'); return;
+  }
+  schools.push(data); save(); fillSelects();
+  document.getElementById('addName').value = '';
+  alert('학교 추가 완료');
 }
 
-function selectType(t){
-selectedType=t;
-renderTypes();
-updateSchoolList();
+// ── 학교 삭제 ────────────────────────────────────────
+function openDeletePage() { showPage('deletePage'); }
+function updateDeleteSchools() {
+  const type   = document.getElementById('deleteType').value;
+  const region = document.getElementById('deleteRegion').value;
+  const f = schools.filter(s => s.type === type && s.region === region);
+  document.getElementById('deleteSchool').innerHTML =
+    `<option value="">학교 선택</option>` + f.map(s => `<option>${s.name}</option>`).join('');
+}
+document.getElementById('deleteType').onchange   = updateDeleteSchools;
+document.getElementById('deleteRegion').onchange = updateDeleteSchools;
+
+function showDeleteResult() {
+  const name = document.getElementById('deleteSchool').value;
+  if (!name) { alert('학교를 선택하세요.'); return; }
+  document.getElementById('deleteResult').innerHTML = `
+    <div class="result-item" style="cursor:default; margin-top:12px;">
+      <div class="del-row">
+        <span>${name}</span>
+        <button class="btn-danger" onclick="deleteSchoolFinal('${name}')">삭제</button>
+      </div>
+    </div>`;
+}
+function deleteSchoolFinal(name) {
+  schools = schools.filter(s => s.name !== name);
+  save(); fillSelects();
+  document.getElementById('deleteResult').innerHTML = '';
+  alert('삭제 완료');
 }
 
-/* select */
-function fillSelects(){
+// ── 포스터 등록 ──────────────────────────────────────
+function openPosterPage() { showPage('posterPage'); }
+function updatePosterSchools() {
+  const type   = document.getElementById('posterType').value;
+  const region = document.getElementById('posterRegion').value;
+  const f = schools.filter(s => s.type === type && s.region === region);
+  document.getElementById('posterSchool').innerHTML =
+    `<option value="">학교 선택</option>` + f.map(s => `<option>${s.name}</option>`).join('');
+}
+document.getElementById('posterType').onchange   = updatePosterSchools;
+document.getElementById('posterRegion').onchange = updatePosterSchools;
 
-let regionHtml="";
-
-regions.forEach(r=>{
-regionHtml += `<option>${r}</option>`;
-});
-
-[
-"regionSelect",
-"addRegion",
-"deleteRegion",
-"posterRegion",
-"posterDeleteRegion"
-].forEach(id=>{
-document.getElementById(id).innerHTML=regionHtml;
-});
-
-let typeHtml="";
-
-types.forEach(t=>{
-typeHtml += `<option>${t}</option>`;
-});
-
-[
-"addType",
-"deleteType",
-"posterType",
-"posterDeleteType"
-].forEach(id=>{
-document.getElementById(id).innerHTML=typeHtml;
-});
-
-updateSchoolList();
-updateDeleteSchools();
-updatePosterSchools();
-updatePosterDeleteSchools();
+function savePoster() {
+  const name = document.getElementById('posterSchool').value;
+  if (!name)          { alert('학교를 선택하세요.'); return; }
+  if (!selectedImage) { alert('이미지를 선택하세요.'); return; }
+  schools.find(s => s.name === name).poster = selectedImage;
+  save(); alert('포스터 등록 완료');
 }
 
-function updateSchoolList(){
-
-let region=document.getElementById("regionSelect").value;
-
-let filtered=schools.filter(s=>
-s.type===selectedType &&
-s.region===region
-);
-
-let html=`<option value="">학교 선택</option>`;
-
-filtered.forEach(s=>{
-html += `<option>${s.name}</option>`;
-});
-
-document.getElementById("schoolSelect").innerHTML=html;
+// ── 포스터 삭제 ──────────────────────────────────────
+function openPosterDeletePage() { showPage('posterDeletePage'); }
+function updatePosterDeleteSchools() {
+  const type   = document.getElementById('posterDeleteType').value;
+  const region = document.getElementById('posterDeleteRegion').value;
+  const f = schools.filter(s => s.type === type && s.region === region);
+  document.getElementById('posterDeleteSchool').innerHTML =
+    `<option value="">학교 선택</option>` + f.map(s => `<option>${s.name}</option>`).join('');
+  document.getElementById('posterPreviewBox').innerHTML =
+    `<div class="poster-empty">등록된 포스터가 없습니다.</div>`;
 }
-
-document.getElementById("regionSelect").onchange=updateSchoolList;
-
-/* 검색 */
-function searchSchool(){
-
-let name=document.getElementById("schoolSelect").value;
-
-if(name===""){
-alert("학교를 선택하세요.");
-return;
-}
-
-let school=schools.find(s=>s.name===name);
-
-document.getElementById("resultBox").innerHTML=
-`
-<div class="resultItem"
-onclick="openDetail('${school.name}')">
-${school.name}
-</div>
-`;
-}
-
-/* 상세 */
-function openDetail(name){
-
-showPage("detailPage");
-
-let school=schools.find(s=>s.name===name);
-
-document.getElementById("detailTitle").innerText=name;
-
-if(school.poster){
-document.getElementById("posterBox").innerHTML=
-`<img src="${school.poster}">`;
-}else{
-document.getElementById("posterBox").innerHTML=
-`<div class="empty">등록된 포스터가 없습니다.</div>`;
-}
-}
-
-/* 메인 복귀 */
-function goMain(){
-showPage("mainPage");
-}
-
-/* 학교 추가 */
-function openAddPage(){
-showPage("addPage");
-}
-
-function addSchool(){
-
-let data={
-type:document.getElementById("addType").value,
-region:document.getElementById("addRegion").value,
-name:document.getElementById("addName").value.trim(),
-poster:""
+document.getElementById('posterDeleteType').onchange   = updatePosterDeleteSchools;
+document.getElementById('posterDeleteRegion').onchange = updatePosterDeleteSchools;
+document.getElementById('posterDeleteSchool').onchange = function () {
+  const s = schools.find(s => s.name === this.value);
+  document.getElementById('posterPreviewBox').innerHTML = s?.poster
+    ? `<img src="${s.poster}">`
+    : `<div class="poster-empty">등록된 포스터가 없습니다.</div>`;
 };
-
-if(data.name===""){
-alert("학교 이름 입력");
-return;
+function deletePoster() {
+  const name = document.getElementById('posterDeleteSchool').value;
+  if (!name) { alert('학교를 선택하세요.'); return; }
+  schools.find(s => s.name === name).poster = '';
+  save();
+  document.getElementById('posterPreviewBox').innerHTML =
+    `<div class="poster-empty">등록된 포스터가 없습니다.</div>`;
+  alert('포스터 삭제 완료');
 }
 
-schools.push(data);
-
-saveData();
-fillSelects();
-
-alert("학교 추가 완료");
+// ── 이미지 업로드 ────────────────────────────────────
+const drop = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+drop.onclick = () => fileInput.click();
+fileInput.onchange = function () { loadImage(this.files[0]); };
+drop.ondragover = e => e.preventDefault();
+drop.ondrop = e => { e.preventDefault(); loadImage(e.dataTransfer.files[0]); };
+function loadImage(f) {
+  const r = new FileReader();
+  r.onload = e => {
+    selectedImage = e.target.result;
+    const p = document.getElementById('preview');
+    p.src = selectedImage; p.style.display = 'block';
+  };
+  r.readAsDataURL(f);
 }
 
-/* 학교 삭제 */
-function openDeletePage(){
-showPage("deletePage");
-}
-
-function updateDeleteSchools(){
-
-let type=document.getElementById("deleteType").value;
-let region=document.getElementById("deleteRegion").value;
-
-let filtered=schools.filter(s=>
-s.type===type &&
-s.region===region
-);
-
-let html=`<option value="">학교 선택</option>`;
-
-filtered.forEach(s=>{
-html += `<option>${s.name}</option>`;
-});
-
-document.getElementById("deleteSchool").innerHTML=html;
-}
-
-document.getElementById("deleteType").onchange=updateDeleteSchools;
-document.getElementById("deleteRegion").onchange=updateDeleteSchools;
-
-function showDeleteResult(){
-
-let name=document.getElementById("deleteSchool").value;
-
-if(name===""){
-alert("학교 선택");
-return;
-}
-
-document.getElementById("deleteResult").innerHTML=
-`
-<div class="resultItem">
-${name}
-
-<button class="red"
-onclick="deleteSchoolFinal('${name}')">
-학교 삭제
-</button>
-</div>
-`;
-}
-
-function deleteSchoolFinal(name){
-
-schools=schools.filter(s=>s.name!==name);
-
-saveData();
-fillSelects();
-
-document.getElementById("deleteResult").innerHTML="";
-
-alert("삭제 완료");
-}
-
-/* 포스터 등록 */
-function openPosterPage(){
-showPage("posterPage");
-}
-
-function updatePosterSchools(){
-
-let type=document.getElementById("posterType").value;
-let region=document.getElementById("posterRegion").value;
-
-let filtered=schools.filter(s=>
-s.type===type &&
-s.region===region
-);
-
-let html=`<option value="">학교 선택</option>`;
-
-filtered.forEach(s=>{
-html += `<option>${s.name}</option>`;
-});
-
-document.getElementById("posterSchool").innerHTML=html;
-}
-
-document.getElementById("posterType").onchange=updatePosterSchools;
-document.getElementById("posterRegion").onchange=updatePosterSchools;
-
-function savePoster(){
-
-let name=document.getElementById("posterSchool").value;
-
-if(name===""){
-alert("학교 선택");
-return;
-}
-
-let school=schools.find(s=>s.name===name);
-
-school.poster=selectedImage;
-
-saveData();
-
-alert("포스터 등록 완료");
-}
-
-/* 포스터 삭제 */
-function openPosterDeletePage(){
-showPage("posterDeletePage");
-}
-
-function updatePosterDeleteSchools(){
-
-let type=document.getElementById("posterDeleteType").value;
-let region=document.getElementById("posterDeleteRegion").value;
-
-let filtered=schools.filter(s=>
-s.type===type &&
-s.region===region
-);
-
-let html=`<option value="">학교 선택</option>`;
-
-filtered.forEach(s=>{
-html += `<option>${s.name}</option>`;
-});
-
-document.getElementById("posterDeleteSchool").innerHTML=html;
-}
-
-document.getElementById("posterDeleteType").onchange=updatePosterDeleteSchools;
-document.getElementById("posterDeleteRegion").onchange=updatePosterDeleteSchools;
-
-function deletePoster(){
-
-let name=document.getElementById("posterDeleteSchool").value;
-
-if(name===""){
-alert("학교 선택");
-return;
-}
-
-let school=schools.find(s=>s.name===name);
-
-school.poster="";
-
-saveData();
-
-alert("포스터 삭제 완료");
-}
-
-/* 업로드 */
-const drop=document.getElementById("dropZone");
-const file=document.getElementById("fileInput");
-
-drop.onclick=()=>file.click();
-
-file.onchange=function(){
-loadImage(this.files[0]);
-}
-
-drop.ondragover=function(e){
-e.preventDefault();
-}
-
-drop.ondrop=function(e){
-e.preventDefault();
-loadImage(e.dataTransfer.files[0]);
-}
-
-function loadImage(f){
-
-const reader=new FileReader();
-
-reader.onload=function(e){
-
-selectedImage=e.target.result;
-
-document.getElementById("preview").src=selectedImage;
-document.getElementById("preview").style.display="block";
-}
-
-reader.readAsDataURL(f);
-}
-
+// ── 초기화 ───────────────────────────────────────────
 renderTypes();
 fillSelects();
 </script>
-
 </body>
 </html>
